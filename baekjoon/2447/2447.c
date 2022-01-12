@@ -64,25 +64,22 @@ void star(int a, int x, int y, int ** paint)
     }
     else
     {
-        int x1, y1;
-        x1 = x;
-        y1 = y;
         for (int i = 0; i < 3; i++)
         {
-            star(a / 3, x1, y1, paint);
-            x1 += a / 3;
+            star(a / 3, x, y, paint);
+            x += a / 3;
         }
-        x1 -= a;
-        y1 += a / 3;
-        star(a / 3, x1, y1, paint);
-        x1 += a / 3 * 2;
-        star(a / 3, x1, y1, paint);
-        x1 -= a - a / 3;
-        y1 += a / 3;
+        x -= a;
+        y += a / 3;
+        star(a / 3, x, y, paint);
+        x += a / 3 * 2;
+        star(a / 3, x, y, paint);
+        x -= a - a / 3;
+        y += a / 3;
         for (int i = 0; i < 3; i++)
         {
-            star(a / 3, x1, y1, paint);
-            x1 += a / 3;
+            star(a / 3, x, y, paint);
+            x += a / 3;
         }
     }
 }
