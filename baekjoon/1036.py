@@ -1,52 +1,38 @@
-import itertools
 import sys
 
-
-def strto36(s):
-    res = 0
-    for k in reversed(range(len(s))):
-        if ord('0') <= ord(s[len(s) - k - 1]) <= ord('9'):
-            res += int(s[len(s) - k - 1]) * (36 ** k)
-        else:
-            res += (10 + ord(s[len(s) - k - 1]) - ord('A')) * (36 ** k)
-    return res
-
-
-def i36tos(num):
-    m = []
-    while num > 36:
-        m.append(num % 36)
-        num //= 36
-    resStr = [str(num) if 0 <= num <= 9 else chr(ord('A') + num - 10)]
-    for a in reversed(m):
-        resStr.append(str(a) if 0 <= a <= 9 else chr(ord('A') + a - 10))
-    return resStr
-
-
-input = sys.stdin.readline
 N = int(input())
 strList = []
-nums = [i for i in range(36)]
-total = 0
-S = set()
+numList = [0 for i in range(36)]
+d = {}
+for i in range(36):
+    if i < 10:
+        d[str(i)] = i
+    else:
+        d[chr(ord('A') + i - 10)] = i
 for i in range(N):
-    t = input()
-    strList.append(t)
-    total += strto36(t)
-    S.update(t)
+    strList.append(sys.stdin.readline().strip())
+    for idx, j in enumerate(reversed(strList[i])):
+        numList[d[j]] += (35 - d[j]) * (36 ** idx)
 K = int(input())
-for i in list(itertools.combinations(S, K if K <= len(S) else len(S))):
-    t_tot = 0
-    subList = []
-    for j in strList:
-        tmp = list(j)
-        for idx, p in enumerate(tmp):
-            if p in i:
-                tmp[idx] = 'Z'
-        subList.append(tmp)
-    for j in subList:
-        t_tot += strto36(j)
-    if t_tot > total:
-        total = t_tot
-for i in i36tos(total):
+cList = []
+for i in range(K):
+    cList.append(numList.index(max(numList)))
+    numList[numList.index(max(numList))] = 0
+total = 0
+for i in strList:
+    s = 0
+    for idx, j in enumerate(reversed(i)):
+        if d[j] in cList:
+            s += 35 * (36 ** idx)
+        else:
+            s += d[j] * (36 ** idx)
+    total += s
+m = []
+while total >= 36:
+    m.append(total % 36)
+    total //= 36
+res = [str(total) if 0 <= total <= 9 else chr(ord('A') + total - 10)]
+for a in reversed(m):
+    res.append(str(a) if 0 <= a <= 9 else chr(ord('A') + a - 10))
+for i in res:
     print(i, end='')
